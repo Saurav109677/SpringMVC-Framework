@@ -1,0 +1,60 @@
+Spring MVC
+Bean (Life Cycle)
+     Singleton / Prototype
+		<beans>
+			<bean id="myCoach"
+				   class="com.springframework.udemy"
+					scope="prototype/singleton"
+					init-method="<<methodName inside the bean>>"
+					destroy-method="<<methodName inside the bean>>">
+			<bean>
+		</beans>
+		 <context:component-scan base-package="com.springframework.udemy.annotation"/> 
+		      //(this is to keep track of the folder to fetch the @Component beans)
+NOTE: 
+In contrast to the other scopes, Spring does not manage the complete lifecycle of a
+prototype bean.
+ in the case of prototypes, configured destruction lifecycle callbacks are not called. 
+ (i.e @PreDestroy or destroy-method is not called for Prototype scope)
+ 
+Inversion of Control (IOC)
+Dependency Injection
+Annotations
+        @Component (makes bean)
+        @Autowired    (use for DI)
+        @Qualifier  (use to qualify a class to be used out of many implementations)
+        @Scope("Singleton")  - means it will make only one instance irrespect of calling multiple times
+        @Scope("Prototype") - everytime new instance will be created
+        @PostConstruct	- initialization method annotation
+		@PreDestroy  - annotation for final() or say beforeDestroy method
+	
+3 ways of Configuring Spring container
+	1.Full XML configured
+			<bean></bean> etc. etc.
+	2.XML component scan
+			 <context:component-scan base-package="com.springframework.udemy.annotation"/> 
+	3.Java Configuration Class (No XML)
+	
+			@Configuration
+			@ComponentScan("com.springframework.udemy")
+			public class SportConfig{
+			}
+			
+			In main file:
+			AnnotationConfigApplicationContext context=new AnnotationConfigApplicationContext(SportConfig.class);
+			
+			
+			-----------------------------------------------------------------------------------------------------------------------------------------------
+			
+			@Configuration (not componetScan as we r making bean manually)
+			public class SportConfig{
+				@Bean	 (Manually creating bean in config file using java and not xml)
+				public FortuneService happyFortuneService(){
+					return new HappyFortuneService();
+				}
+				
+				@Bean
+				public  Coach swimCoach(){
+					return new 	SwimCoach(happyFortuneService());   //Dependency Injection
+				}
+			}
